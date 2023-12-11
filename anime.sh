@@ -19,9 +19,13 @@ filename=${filename,,}
 path=$2
 
 # Define densities and their corresponding resize percentages
-declare -A densities=( ["xxxhdpi"]="100%" ["xxhdpi"]="75%" ["xhdpi"]="50%" ["hdpi"]="37.5%" ["mdpi"]="25%" )
+declare -A densities=( ["xxhdpi"]="75%" ["xhdpi"]="50%" ["hdpi"]="37.5%" ["mdpi"]="25%" )
 
-# Iterate over the densities
+# Copy the original image for xxxhdpi density(100% version)
+mkdir -p "$path/drawable-xxxhdpi"
+cp $1 "$path/drawable-xxxhdpi/$filename.$extension"
+
+# Iterate over the other densities
 for density in "${!densities[@]}"; do
     # Create necessary directory if it doesn't exist
     mkdir -p "$path/drawable-$density"
@@ -29,4 +33,3 @@ for density in "${!densities[@]}"; do
     # Create image with the corresponding size
     convert $1 -resize ${densities[$density]} "$path/drawable-$density/$filename.$extension"
 done
-
